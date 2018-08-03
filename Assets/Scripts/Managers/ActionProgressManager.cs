@@ -13,7 +13,7 @@ namespace Assets.Scripts.Managers {
         public Image ProgressBar;
         public SaveManager SaveManager;
 
-        private float progressStep;
+        private float _progressStep;
 
         public void Awake() {
             gameObject.SetActive(false);
@@ -24,7 +24,7 @@ namespace Assets.Scripts.Managers {
         /// </summary>
         public async void StartAction(int daysCount, Action callback) {
             DaysLeft = daysCount;
-            progressStep = 1f / daysCount;
+            _progressStep = 1f / daysCount;
             gameObject.SetActive(true);
             var result = await ProcessAction();
             if (result) {
@@ -53,7 +53,7 @@ namespace Assets.Scripts.Managers {
         /// Плавное заполнение прогресс бара
         /// </summary>
         private async Task FillProgress() {
-            var nextValue = ProgressBar.fillAmount + progressStep;
+            var nextValue = ProgressBar.fillAmount + _progressStep;
             if (nextValue > 1) nextValue = 1;
             while (ProgressBar.fillAmount < nextValue) {
                 ProgressBar.fillAmount += 0.15f * Time.deltaTime;
