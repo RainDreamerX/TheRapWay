@@ -16,6 +16,7 @@ namespace Assets.Scripts.UI.Actions {
     public class NewTrack : BaseAction {
         private const string NO_FEAT = "Не выбран";
 
+        public InputField TrackName;
         public Dropdown TrackTheme;
         public Dropdown TrackStyle;
         public Dropdown Feat;
@@ -26,17 +27,17 @@ namespace Assets.Scripts.UI.Actions {
         public Text PriceText;
         public Button StartButton;
 
-        private NewTrackModel track;
-        private int duration = 5;
-        private int price;
-        private bool alreadyFeatOffer;
+        private NewTrackModel _track;
+        private int _duration = 5;
+        private int _price;
+        private bool _alreadyFeatOffer;
 
         internal static readonly Dictionary<TextSourse, SettingCost> TextCosts = new Dictionary<TextSourse, SettingCost> {
             {TextSourse.Self, new SettingCost {Duration = 5, PricePercent = 0}},
             {TextSourse.Ghostwriter, new SettingCost {Duration = 2, PricePercent = 2}}
         };
 
-        private readonly Dictionary<BitSource, SettingCost> bitCosts = new Dictionary<BitSource, SettingCost> {
+        private readonly Dictionary<BitSource, SettingCost> _bitCosts = new Dictionary<BitSource, SettingCost> {
             {BitSource.Free, new SettingCost {Duration = 0, PricePercent = 0}},
             {BitSource.Self, new SettingCost {Duration = 5, PricePercent = 0}},
             {BitSource.Bitmaker, new SettingCost {Duration = 3, PricePercent = 4}}
@@ -91,23 +92,24 @@ namespace Assets.Scripts.UI.Actions {
         /// Собирает выбранные параметры в модель трэка
         /// </summary>
         protected override void ParseActionModel() {
-            if (track == null) track = new NewTrackModel();
-            track.Theme = EnumExt.GetFromDescription<TrackTheme>(TrackTheme.captionText.text);
-            track.Style = EnumExt.GetFromDescription<TrackStyle>(TrackStyle.captionText.text);
-            track.TextSourse = EnumExt.GetFromDescription<TextSourse>(TrackText.captionText.text);
-            track.BitSource = EnumExt.GetFromDescription<BitSource>(TrackBit.captionText.text);
-            track.Feat = RappersManager.GetByName(Feat.captionText.text);
-            track.Autotune = AutotuneToggle.isOn;
+            if (_track == null) _track = new NewTrackModel();
+            _track.Name = TrackName.text;
+            _track.Theme = EnumExt.GetFromDescription<TrackTheme>(TrackTheme.captionText.text);
+            _track.Style = EnumExt.GetFromDescription<TrackStyle>(TrackStyle.captionText.text);
+            _track.TextSourse = EnumExt.GetFromDescription<TextSourse>(TrackText.captionText.text);
+            _track.BitSource = EnumExt.GetFromDescription<BitSource>(TrackBit.captionText.text);
+            _track.Feat = RappersManager.GetByName(Feat.captionText.text);
+            _track.Autotune = AutotuneToggle.isOn;
         }
 
         /// <summary>
         /// Рассчитывает длительность создания и стоимость
         /// </summary>
         protected override void CalculateDurationAndPrice() {
-            var textCost = TextCosts[track.TextSourse];
-            var bitCost = bitCosts[track.BitSource];
-            duration = textCost.Duration + bitCost.Duration;
-            price = PlayerManager.GetFansPercentValue() / 4 * (textCost.PricePercent + bitCost.PricePercent);
+            var textCost = TextCosts[_track.TextSourse];
+            var bitCost = _bitCosts[_track.BitSource];
+            _duration = textCost.Duration + bitCost.Duration;
+            _price = PlayerManager.GetFansPercentValue() / 4 * (textCost.PricePercent + bitCost.PricePercent);
             ShowDurationAndPriceInfo();
         }
 
@@ -115,8 +117,8 @@ namespace Assets.Scripts.UI.Actions {
         /// Выводит информацию о длительности и стоимости
         /// </summary>
         private void ShowDurationAndPriceInfo() {
-            DurationText.text = $"Кол-во дней: {duration}";
-            PriceText.text = price > 0 ? $"Стоимость: {NumberFormatter.FormatValue(price)}" : string.Empty;
+            DurationText.text = $"Кол-во дней: {_duration}";
+            PriceText.text = _price > 0 ? $"Стоимость: {NumberFormatter.FormatValue(_price)}" : string.Empty;
         }
 
         /// <summary>
@@ -125,14 +127,14 @@ namespace Assets.Scripts.UI.Actions {
         private void CreateNewTrack() {
             ParseActionModel();
             if (!CheckFeat()) return;
-            if (!PlayerManager.EnoughMoney(price)) {
+            if (!PlayerManager.EnoughMoney(_price)) {
                 AlertManager.ShowMessage("У вас недостаточно денег");
                 return;
             }
-            PlayerManager.SpendMoney(price);
+            PlayerManager.SpendMoney(_price);
             StatsManager.UpdateStats();
             gameObject.SetActive(false);
-            ActionProgressManager.StartAction(duration, FinishTrack);
+            ActionProgressManager.StartAction(_duration, ActionType.NewTrack, FinishTrack);
             gameObject.GetComponentInParent<ActionsMenu>().TriggerChildVisible();
         }
 
@@ -140,14 +142,14 @@ namespace Assets.Scripts.UI.Actions {
         /// Проверяет, что есть согласие на фит, если он выбран
         /// </summary>
         private bool CheckFeat() {
-            if (track.Feat == null) return true;
-            if (alreadyFeatOffer) return false;
-            alreadyFeatOffer = true;
-            if (RappersManager.IsAgree(track.Feat, PlayerManager.GetInfo().Fans)) {
-                AlertManager.ShowMessage($"{track.Feat.Name} согласился на фит");
+            if (_track.Feat == null) return true;
+            if (_alreadyFeatOffer) return false;
+            _alreadyFeatOffer = true;
+            if (RappersManager.IsAgree(_track.Feat, PlayerManager.GetInfo().Fans)) {
+                AlertManager.ShowMessage($"{_track.Feat.Name} согласился на фит");
                 return true;
             }
-            AlertManager.ShowMessage($"{track.Feat.Name} отказался от совместного трэка");
+            AlertManager.ShowMessage($"{_track.Feat.Name} отказался от совместного трэка");
             return false;
         }
 
@@ -155,15 +157,15 @@ namespace Assets.Scripts.UI.Actions {
         /// Завершить создание трэка
         /// </summary>
         private void FinishTrack() {
-            alreadyFeatOffer = false;
-            var grade = TrackSuccessAnalyzer.AnalyzeTrack(track);
+            _alreadyFeatOffer = false;
+            var grade = TrackSuccessAnalyzer.AnalyzeTrack(_track);
             var result = GetTrackResult(grade);
             var playerInfo = PlayerManager.GetInfo();
-            track.Id = PlayerManager.GetInfo().LastTrack?.Id + 1 ?? 1;
-            track.Grade = grade;
+            _track.Id = PlayerManager.GetInfo().LastTrack?.Id + 1 ?? 1;
+            _track.Grade = grade;
             playerInfo.Fans += result.FansIncrease;
             playerInfo.Money += result.Income;
-            playerInfo.LastTrack = track;
+            playerInfo.LastTrack = _track;
             ActionResult.Show(result);
         }
 
@@ -173,9 +175,9 @@ namespace Assets.Scripts.UI.Actions {
         private ActionResultModel GetTrackResult(SuccessGrade grade) {
             var gradePercent = GradePercentManager.GetRewardPercent(grade, ActionType.NewTrack);
             var fansPercentValue = PlayerManager.GetFansPercentValue();
-            var featBonus = track.Feat?.Fans / 150 ?? 0;
+            var featBonus = _track.Feat?.Fans / 150 ?? 0;
             return new ActionResultModel {
-                Action = track.Feat == null ? ActionType.NewTrack : ActionType.Feat,
+                Action = _track.Feat == null ? ActionType.NewTrack : ActionType.Feat,
                 FansIncrease = CalculateStatIncrease(gradePercent, fansPercentValue, 0.1f) + featBonus,
                 Income = CalculateStatIncrease(gradePercent, fansPercentValue, 0.2f) * Random.Range(3, 6),
                 Top = PlayerManager.GetInfo().Fans >= 50000 ? GetPlaceInTop(grade) : -1,

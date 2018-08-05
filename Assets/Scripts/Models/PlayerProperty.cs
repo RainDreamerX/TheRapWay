@@ -25,6 +25,6 @@ namespace Assets.Scripts.Models {
         /// <summary>
         /// Текущий дом
         /// </summary>
-        public int House;
+        public HouseType House;
     }
 }

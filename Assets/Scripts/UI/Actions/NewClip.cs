@@ -13,6 +13,7 @@ namespace Assets.Scripts.UI.Actions {
     /// Съемка клипа на трэк
     /// </summary>
     public class NewClip : BaseAction {
+        public Text TrackName;
         public Text TrackTheme;
         public Text TrackStyle;
         public Text SuccessGradeText;
@@ -26,10 +27,10 @@ namespace Assets.Scripts.UI.Actions {
         public Toggle SoundProducer;
         public Button StartButton;
 
-        private NewClipModel clip;
-        private int lastTrackId = -1;
-        private int duration;
-        private int price;
+        private NewClipModel _clip;
+        private int _lastTrackId = -1;
+        private int _duration;
+        private int _price;
 
         /// <summary>
         /// Инициализация дочернего компонента
@@ -62,6 +63,7 @@ namespace Assets.Scripts.UI.Actions {
         /// Выводит информацию о последнем треке
         /// </summary>
         private void ShowTrackInfo(NewTrackModel lastTrack) {
+            TrackName.text = lastTrack.Name;
             TrackTheme.text = $"Тематика: {lastTrack.Theme.GetDescription()}";
             TrackStyle.text = $"Стиль: {lastTrack.Style.GetDescription()}";
             SuccessGradeText.text = $"Успешность: {lastTrack.Grade.GetDescription()}";
@@ -78,6 +80,7 @@ namespace Assets.Scripts.UI.Actions {
         /// Отображает или скрывает блок информации о треке
         /// </summary>
         private void TriggerInfoVisible(bool hasTrack) {
+            TrackName.gameObject.SetActive(hasTrack);
             TrackTheme.gameObject.SetActive(hasTrack);
             TrackStyle.gameObject.SetActive(hasTrack);
             SuccessGradeText.gameObject.SetActive(hasTrack);
@@ -89,12 +92,12 @@ namespace Assets.Scripts.UI.Actions {
         /// Собирает модель клипа
         /// </summary>
         protected override void ParseActionModel() {
-            if (clip == null) clip = new NewClipModel();
-            clip.Track = PlayerManager.GetInfo().LastTrack;
-            clip.HasScreenwritter = Screenwritter.isOn;
-            clip.HasOperator = Operator.isOn;
-            clip.HasProducer = Producer.isOn;
-            clip.HasSoundProducer = SoundProducer.isOn;
+            if (_clip == null) _clip = new NewClipModel();
+            _clip.Track = PlayerManager.GetInfo().LastTrack;
+            _clip.HasScreenwritter = Screenwritter.isOn;
+            _clip.HasOperator = Operator.isOn;
+            _clip.HasProducer = Producer.isOn;
+            _clip.HasSoundProducer = SoundProducer.isOn;
         }
 
         /// <summary>
@@ -102,10 +105,10 @@ namespace Assets.Scripts.UI.Actions {
         /// </summary>
         protected override void CalculateDurationAndPrice() {
             var settingCosts = new List<SettingCost> {GetCost(Screenwritter.isOn), GetCost(Producer.isOn), GetCost(Operator.isOn), GetCost(SoundProducer.isOn)};
-            duration = settingCosts.Sum(e => e.Duration);
-            price = PlayerManager.GetFansPercentValue() / 5 * settingCosts.Sum(e => e.PricePercent);
-            Duration.text = $"Кол-во дней: {duration}д";
-            Price.text = price > 0 ? $"Стоимость: {NumberFormatter.FormatValue(price)}" : string.Empty;
+            _duration = settingCosts.Sum(e => e.Duration);
+            _price = PlayerManager.GetFansPercentValue() / 5 * settingCosts.Sum(e => e.PricePercent);
+            Duration.text = $"Кол-во дней: {_duration}д";
+            Price.text = _price > 0 ? $"Стоимость: {NumberFormatter.FormatValue(_price)}" : string.Empty;
         }
 
         /// <summary>
@@ -123,10 +126,10 @@ namespace Assets.Scripts.UI.Actions {
         /// </summary>
         private void CreateNewClip() {
             if (!ConditionsCorrect()) return;
-            PlayerManager.SpendMoney(price);
+            PlayerManager.SpendMoney(_price);
             StatsManager.UpdateStats();
             gameObject.SetActive(false);
-            ActionProgressManager.StartAction(duration, FinishClip);
+            ActionProgressManager.StartAction(_duration, ActionType.NewClip, FinishClip);
             gameObject.GetComponentInParent<ActionsMenu>().TriggerChildVisible();
         }
 
@@ -138,11 +141,11 @@ namespace Assets.Scripts.UI.Actions {
                 AlertManager.ShowMessage("Вы еще не записали ни одного трэка");
                 return false;
             }
-            if (clip != null && clip.Track.Id == lastTrackId) {
+            if (_clip != null && _clip.Track.Id == _lastTrackId) {
                 AlertManager.ShowMessage("Вы уже сняли клип на этот трэк");
                 return false;
             }
-            if (!PlayerManager.EnoughMoney(price)) {
+            if (!PlayerManager.EnoughMoney(_price)) {
                 AlertManager.ShowMessage("У вас недостаточно денег");
                 return false;
             }
@@ -154,9 +157,9 @@ namespace Assets.Scripts.UI.Actions {
         /// </summary>
         private void FinishClip() {
             ParseActionModel();
-            var grade = ClipSuccessAnalyzer.AnalyzeClip(clip);
+            var grade = ClipSuccessAnalyzer.AnalyzeClip(_clip);
             var result = GetClipResult(grade);
-            lastTrackId = clip.Track.Id;
+            _lastTrackId = _clip.Track.Id;
             var info = PlayerManager.GetInfo();
             info.Fans += result.FansIncrease;
             info.Money += result.Income;
@@ -169,7 +172,7 @@ namespace Assets.Scripts.UI.Actions {
         private ActionResultModel GetClipResult(SuccessGrade grade) {
             var gradePercent = GradePercentManager.GetRewardPercent(grade, ActionType.NewClip);
             var fansPercentValue = PlayerManager.GetFansPercentValue();
-            var featBonus = clip.Track.Feat?.Fans / 150 ?? 0;
+            var featBonus = _clip.Track.Feat?.Fans / 150 ?? 0;
             return new ActionResultModel {
                 Action = ActionType.NewClip,
                 FansIncrease = CalculateStatIncrease(gradePercent, fansPercentValue, 0.1f) + featBonus,

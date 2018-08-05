@@ -10,13 +10,13 @@ namespace Assets.Scripts.Managers {
         /// <summary>
         /// Данные игрока
         /// </summary>
-        private static PlayerInfo player;
+        private static PlayerInfo _player;
 
         /// <summary>
         /// Сбросить данные
         /// </summary>
         public static void CreateNew(string name) {
-            player = new PlayerInfo {
+            _player = new PlayerInfo {
                 Name = name,
                 Money = 0,
                 Fans = 0,
@@ -33,7 +33,7 @@ namespace Assets.Scripts.Managers {
                     BitMaking = 0,
                     CanCheckSocials = true
                 },
-                PlayerProperty = new PlayerProperty {HasAutotune = false}
+                PlayerProperty = new PlayerProperty {HasAutotune = false, House = HouseType.Poor}
             };
         }
 
@@ -41,35 +41,35 @@ namespace Assets.Scripts.Managers {
         /// Возвращает информацию игрока
         /// </summary>
         public static PlayerInfo GetInfo() {
-            return player;
+            return _player;
         }
         
         /// <summary>
         /// Устанавливает данные игрока
         /// </summary>
         public static void SetInfo(PlayerInfo info) {
-            player = info;
+            _player = info;
         }
 
         /// <summary>
         /// Возвращает навыки
         /// </summary>
         public static PlayerSkills GetSkills() {
-            return player.PlayerSkills;
+            return _player.PlayerSkills;
         }
 
         /// <summary>
         /// Возвращает имущество
         /// </summary>
         public static PlayerProperty GetProperty() {
-            return player.PlayerProperty;
+            return _player.PlayerProperty;
         }
 
         /// <summary>
         /// Возвращает значение одного процента от числа фанатов или минимальное значение
         /// </summary>
         public static int GetFansPercentValue() {
-            var value = player.Fans / 100;
+            var value = _player.Fans / 100;
             if (value < 10) value = 10;
             return value;
         }
@@ -78,14 +78,14 @@ namespace Assets.Scripts.Managers {
         /// Проверяет наличие денег
         /// </summary>
         public static bool EnoughMoney(int price) {
-            return player.Money >= price;
+            return _player.Money >= price;
         }
 
         /// <summary>
         /// Списать сумму с баланса
         /// </summary>
         public static void SpendMoney(int value) {
-            player.Money -= value;
+            _player.Money -= value;
         }
     }
 }

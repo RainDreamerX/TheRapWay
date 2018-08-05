@@ -1,5 +1,7 @@
 ﻿using System;
 using System.Threading.Tasks;
+using Assets.Scripts.Data;
+using Assets.Scripts.Enums;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -12,8 +14,10 @@ namespace Assets.Scripts.Managers {
         public int DaysLeft;
         public Image ProgressBar;
         public SaveManager SaveManager;
+        public Text WorkingPhrase;
 
         private float _progressStep;
+        private ActionType _actionType;
 
         public void Awake() {
             gameObject.SetActive(false);
@@ -22,8 +26,9 @@ namespace Assets.Scripts.Managers {
         /// <summary>
         /// Устанавливает выполнение действия
         /// </summary>
-        public async void StartAction(int daysCount, Action callback) {
+        public async void StartAction(int daysCount, ActionType type, Action callback) {
             DaysLeft = daysCount;
+            _actionType = type;
             _progressStep = 1f / daysCount;
             gameObject.SetActive(true);
             var result = await ProcessAction();
@@ -41,12 +46,22 @@ namespace Assets.Scripts.Managers {
             ProgressBar.fillAmount = 0;
             while (DaysLeft > 0) {
                 if (DaysManager.IsGameLosed()) return false;
+                ShowWorkingPhrase();
                 await Task.Delay(800);
                 await FillProgress();
                 DaysLeft--;
                 DaysManager.NextDay();
             }
+            WorkingPhrase.text = string.Empty;
             return true;
+        }
+
+        /// <summary>
+        /// Показывает фразу в окне прогресса
+        /// </summary>
+        private void ShowWorkingPhrase() {
+            var phrase = DaysLeft == 1 ? "Выкладываем в сеть" : WorkingPhrasesGetter.GetPhrase(_actionType);
+            if (!string.IsNullOrEmpty(phrase)) WorkingPhrase.text = phrase;
         }
 
         /// <summary>

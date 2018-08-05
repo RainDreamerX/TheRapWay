@@ -1,4 +1,5 @@
 ﻿using System;
+using Assets.Scripts.Enums;
 
 namespace Assets.Scripts.Models {
     /// <summary>

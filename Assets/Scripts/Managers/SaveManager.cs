@@ -12,6 +12,13 @@ namespace Assets.Scripts.Managers {
         public static DataToSave Data = new DataToSave();
 
         /// <summary>
+        /// Обработчик закрытия приложения
+        /// </summary>
+        private void OnApplicationQuit() {
+            Save();
+        }
+
+        /// <summary>
         /// Сохранить данные
         /// </summary>
         public void Save() {

@@ -109,7 +109,7 @@ namespace Assets.Scripts.UI.Actions {
             PlayerManager.SpendMoney(price);
             StatsManager.UpdateStats();
             gameObject.SetActive(false);
-            ActionProgressManager.StartAction(duration, FinishVersus);
+            ActionProgressManager.StartAction(duration, ActionType.Battle, FinishVersus);
             gameObject.GetComponentInParent<ActionsMenu>().TriggerChildVisible();
         }
 

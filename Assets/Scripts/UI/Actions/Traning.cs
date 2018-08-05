@@ -122,7 +122,7 @@ namespace Assets.Scripts.UI.Actions {
         /// </summary>
         private void OnSkillLearn<T>(Action<T> action, T value = default(T)) {
             gameObject.SetActive(false);
-            ActionProgressManager.StartAction(TRANING_DURATION, () => action(value));
+            ActionProgressManager.StartAction(TRANING_DURATION, ActionType.Traning, () => action(value));
             gameObject.GetComponentInParent<ActionsMenu>().TriggerChildVisible();
         }
 

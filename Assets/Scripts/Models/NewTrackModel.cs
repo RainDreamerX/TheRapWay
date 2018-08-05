@@ -13,6 +13,11 @@ namespace Assets.Scripts.Models {
         public int Id;
 
         /// <summary>
+        /// Название песни
+        /// </summary>
+        public string Name;
+
+        /// <summary>
         /// Тема
         /// </summary>
         public TrackTheme Theme;

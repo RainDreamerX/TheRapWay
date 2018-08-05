@@ -2,8 +2,10 @@
 using System.Collections.Generic;
 using System.Linq;
 using Assets.Scripts.Enums;
+using Assets.Scripts.Extentions;
 using Assets.Scripts.Managers;
 using Assets.Scripts.Models;
+using Assets.Scripts.Utils;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -17,11 +19,12 @@ namespace Assets.Scripts.UI.Actions {
         public GameObject Micro;
         public GameObject Launchpad;
         public GameObject Autotune;
+        public GameObject Houses;
 
         /// <summary>
         /// Цены микрофонов
         /// </summary>
-        private static readonly Dictionary<PropertyLevel, int> microPrices = new Dictionary<PropertyLevel, int> {
+        private static readonly Dictionary<PropertyLevel, int> _microPrices = new Dictionary<PropertyLevel, int> {
             [PropertyLevel.Cheapest] = 100,
             [PropertyLevel.Cheap] = 1000,
             [PropertyLevel.Middle] = 5000,
@@ -32,12 +35,22 @@ namespace Assets.Scripts.UI.Actions {
         /// <summary>
         /// Цены лаучпадов
         /// </summary>
-        private static readonly Dictionary<PropertyLevel, int> launchpadPrices = new Dictionary<PropertyLevel, int> {
+        private static readonly Dictionary<PropertyLevel, int> _launchpadPrices = new Dictionary<PropertyLevel, int> {
             [PropertyLevel.Cheapest] = 5000,
             [PropertyLevel.Cheap] = 12000,
             [PropertyLevel.Middle] = 20000,
             [PropertyLevel.Expensive] = 30000,
             [PropertyLevel.MostExpensive] = 40000
+        };
+
+        /// <summary>
+        /// Требования для покупки домов
+        /// </summary>
+        private static readonly Dictionary<HouseType, Tuple<int, int>> _housesRequirements = new Dictionary<HouseType, Tuple<int, int>> {
+            [HouseType.Common] = new Tuple<int, int>(100000, 10000),
+            [HouseType.Comfort] = new Tuple<int, int>(500000, 70000),
+            [HouseType.Expensive] = new Tuple<int, int>(1200000, 650000),
+            [HouseType.VeryExpensive] = new Tuple<int, int>(2500000, 1500000)
         };
 
         /// <summary>
@@ -47,6 +60,7 @@ namespace Assets.Scripts.UI.Actions {
             Micro.GetComponentInChildren<Button>().onClick.AddListener(() => OnBuy(OnBuyMicro));
             Launchpad.GetComponentInChildren<Button>().onClick.AddListener(() => OnBuy(OnBuyLaunchpad));
             Autotune.GetComponentInChildren<Button>().onClick.AddListener(() => OnBuy(OnBuyAutotune));
+            Houses.GetComponentInChildren<Button>().onClick.AddListener(() => OnBuy(OnBuyHouse));
         }
 
         /// <summary>
@@ -54,9 +68,10 @@ namespace Assets.Scripts.UI.Actions {
         /// </summary>
         public override void OpenPage() {
             var playerProperty = PlayerManager.GetProperty();
-            ShowPropertyGood(Micro, playerProperty.Micro, microPrices);
-            ShowPropertyGood(Launchpad, playerProperty.Launchpad, launchpadPrices);
+            ShowPropertyGood(Micro, playerProperty.Micro, _microPrices);
+            ShowPropertyGood(Launchpad, playerProperty.Launchpad, _launchpadPrices);
             if (playerProperty.HasAutotune) HideBuyButton(Autotune);
+            ShowHouseProperty(playerProperty);
             gameObject.SetActive(true);
         }
 
@@ -64,13 +79,29 @@ namespace Assets.Scripts.UI.Actions {
         /// Выводит информацию о товаре
         /// </summary>
         private static void ShowPropertyGood(GameObject component, PropertyLevel playerProperty, IReadOnlyDictionary<PropertyLevel, int> prices) {
+            component.GetComponentsInChildren<Text>(true).First(e => e.name == "Level").text = $"Тек. ур. {(int)playerProperty}";
             if (playerProperty != PropertyLevel.MostExpensive) {
-                component.GetComponentsInChildren<Text>(true).First(e => e.name == "Level").text = $"Тек. ур. {(int) playerProperty}";
                 var next = playerProperty + 1;
                 component.GetComponentsInChildren<Text>(true).First(e => e.name == "Price").text = $"{prices[next]} $";
             }
             else {
                 HideBuyButton(component);
+            }
+        }
+
+        /// <summary>
+        /// Выводит информацию о покупке дома
+        /// </summary>
+        private void ShowHouseProperty(PlayerProperty playerProperty) {
+            Houses.GetComponentsInChildren<Text>(true).First(e => e.name == "Level").text = $"Текущий: {playerProperty.House.GetDescription()}";
+            if (playerProperty.House != HouseType.VeryExpensive) {
+                var nextHouse = playerProperty.House + 1;
+                var requirements = _housesRequirements[nextHouse];
+                Houses.GetComponentsInChildren<Text>(true).First(e => e.name == "Price").text = $"{NumberFormatter.FormatValue(requirements.Item1)} $";
+                Houses.GetComponentsInChildren<Text>(true).First(e => e.name == "Fans").text = $"{NumberFormatter.FormatValue(requirements.Item1)}";
+            }
+            else {
+                HideBuyButton(Houses);
             }
         }
 
@@ -81,6 +112,10 @@ namespace Assets.Scripts.UI.Actions {
             component.GetComponentInChildren<Button>(true).gameObject.SetActive(false);
             component.GetComponentsInChildren<Text>(true).First(e => e.name == "Price").gameObject.SetActive(false);
             component.GetComponentsInChildren<Text>(true).First(e => e.name == "AlreadyExist").gameObject.SetActive(true);
+            if (component.name == "Houses") {
+                component.GetComponentsInChildren<Text>(true).First(e => e.name == "Fans").gameObject.SetActive(false);
+                component.GetComponentsInChildren<Image>(true).First(e => e.name == "FansIcon").gameObject.SetActive(false);
+            }
         }
 
         /// <summary>
@@ -99,8 +134,8 @@ namespace Assets.Scripts.UI.Actions {
         /// </summary>
         private void OnBuyMicro(PlayerInfo playerInfo) {
             var nextMicro = playerInfo.PlayerProperty.Micro + 1;
-            if (!EnoughMoney(playerInfo.Money, microPrices[nextMicro])) return;
-            playerInfo.Money -= microPrices[nextMicro];
+            if (!EnoughMoney(playerInfo.Money, _microPrices[nextMicro])) return;
+            playerInfo.Money -= _microPrices[nextMicro];
             playerInfo.PlayerProperty.Micro = nextMicro;
         }
 
@@ -109,8 +144,8 @@ namespace Assets.Scripts.UI.Actions {
         /// </summary>
         private void OnBuyLaunchpad(PlayerInfo playerInfo) {
             var nextPad = playerInfo.PlayerProperty.Launchpad + 1;
-            if (!EnoughMoney(playerInfo.Money, launchpadPrices[nextPad])) return;
-            playerInfo.Money -= launchpadPrices[nextPad];
+            if (!EnoughMoney(playerInfo.Money, _launchpadPrices[nextPad])) return;
+            playerInfo.Money -= _launchpadPrices[nextPad];
             playerInfo.PlayerProperty.Launchpad = nextPad;
         }
 
@@ -121,6 +156,21 @@ namespace Assets.Scripts.UI.Actions {
             if (!EnoughMoney(playerInfo.Money, AUTHOTUNE_PRICE)) return;
             playerInfo.Money -= AUTHOTUNE_PRICE;
             playerInfo.PlayerProperty.HasAutotune = true;
+        }
+
+        /// <summary>
+        /// Обработчик покупки автотюна
+        /// </summary>
+        private void OnBuyHouse(PlayerInfo playerInfo) {
+            var requirements = _housesRequirements[playerInfo.PlayerProperty.House + 1];
+            if (!EnoughMoney(playerInfo.Money, requirements.Item1)) return;
+            if (playerInfo.Fans < requirements.Item2) {
+                AlertManager.ShowMessage("Недостаточное количество фанатов");
+                return;
+            }
+            playerInfo.Money -= requirements.Item1;
+            playerInfo.PlayerProperty.House += 1;
+            GameManager.Instance.SetHouseSprite();
         }
 
         /// <summary>
@@ -137,7 +187,7 @@ namespace Assets.Scripts.UI.Actions {
         /// <summary>
         /// Игнорируем
         /// </summary>
-        protected override void ParseActionModel() { }
-        protected override void CalculateDurationAndPrice() { }
+        protected override void ParseActionModel() {}
+        protected override void CalculateDurationAndPrice() {}
     }
 }

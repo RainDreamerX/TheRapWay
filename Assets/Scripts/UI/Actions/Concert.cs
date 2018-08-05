@@ -110,7 +110,7 @@ namespace Assets.Scripts.UI.Actions {
             PlayerManager.SpendMoney(price);
             StatsManager.UpdateStats();
             gameObject.SetActive(false);
-            ActionProgressManager.StartAction(CONCERT_DURATION, FinishConcert);
+            ActionProgressManager.StartAction(CONCERT_DURATION, ActionType.Concert, FinishConcert);
             gameObject.GetComponentInParent<ActionsMenu>().TriggerChildVisible();
         }
 

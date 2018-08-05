@@ -13,7 +13,7 @@ namespace Assets.Scripts.UI {
         public Button RateButton;
         public Button ExitButton;
 
-        private bool isOpen;
+        private bool _isOpen;
 
         public void Awake() {
             Page.gameObject.SetActive(false);
@@ -26,8 +26,8 @@ namespace Assets.Scripts.UI {
         /// Управляет видимостью меню
         /// </summary>
         private void TriggerVisible() {
-            isOpen = !isOpen;
-            Page.gameObject.SetActive(isOpen);
+            _isOpen = !_isOpen;
+            Page.gameObject.SetActive(_isOpen);
         }
     }
 }

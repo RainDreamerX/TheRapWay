@@ -15,11 +15,13 @@ namespace Assets.Scripts.UI {
         public Button AboutGameButton;
         public Button ExitButton;
         public Image StartPage;
-        public Button BackButton;
+        public Image AboutPage;
+        public Button StartPageBackButton;
+        public Button AboutPageBackButton;
         public InputField NameField;
         public Button StartNewGameButton;
 
-        private string playerName;
+        private string _playerName;
 
         public void Awake() {
             AdsManager.CreateInstance();
@@ -29,10 +31,12 @@ namespace Assets.Scripts.UI {
                 ContinueButton.GetComponentInChildren<Text>().color = Color.gray;
             }
             ContinueButton.onClick.AddListener(ContinueGame);
-            AboutGameButton.onClick.AddListener(() => {});
+            AboutGameButton.onClick.AddListener(() => AboutPage.gameObject.SetActive(true));
             ExitButton.onClick.AddListener(Application.Quit);
             StartPage.gameObject.SetActive(false);
-            BackButton.onClick.AddListener(() => StartPage.gameObject.SetActive(false));
+            AboutPage.gameObject.SetActive(false);
+            StartPageBackButton.onClick.AddListener(() => StartPage.gameObject.SetActive(false));
+            AboutPageBackButton.onClick.AddListener(() => AboutPage.gameObject.SetActive(false));
             NameField.onValueChanged.AddListener(SetName);
             StartNewGameButton.gameObject.SetActive(false);
             StartNewGameButton.onClick.AddListener(StartNewGame);
@@ -48,7 +52,7 @@ namespace Assets.Scripts.UI {
         /// Начать новую игру
         /// </summary>
         private void StartNewGame() {
-            PlayerManager.CreateNew(playerName);
+            PlayerManager.CreateNew(_playerName);
             if (SaveManager.HasSave()) SaveManager.DeleteSave();
             SaveManager.Save();
             SceneManager.LoadSceneAsync(1);
@@ -70,7 +74,7 @@ namespace Assets.Scripts.UI {
                 StartNewGameButton.gameObject.SetActive(false);
                 return;
             }
-            playerName = value;
+            _playerName = value;
             StartNewGameButton.gameObject.SetActive(true);
         }
     }

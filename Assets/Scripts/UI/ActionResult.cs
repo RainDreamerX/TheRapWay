@@ -23,15 +23,15 @@ namespace Assets.Scripts.UI {
         public Text Traning;
         public GameObject Reward;
 
-        private Text fans;
-        private Text money;
-        private Button button;
+        private Text _fans;
+        private Text _money;
+        private Button _button;
 
         public void Awake() {
-            fans = Reward.GetComponentsInChildren<Component>().First(e => e.name == "Fans").GetComponentInChildren<Text>();
-            money = Reward.GetComponentsInChildren<Component>().First(e => e.name == "Money").GetComponentInChildren<Text>();
-            button = GetComponentInChildren<Button>();
-            button.onClick.AddListener(() => gameObject.SetActive(false));
+            _fans = Reward.GetComponentsInChildren<Component>().First(e => e.name == "Fans").GetComponentInChildren<Text>();
+            _money = Reward.GetComponentsInChildren<Component>().First(e => e.name == "Money").GetComponentInChildren<Text>();
+            _button = GetComponentInChildren<Button>();
+            _button.onClick.AddListener(() => gameObject.SetActive(false));
             gameObject.SetActive(false);
         }
 
@@ -58,8 +58,8 @@ namespace Assets.Scripts.UI {
             Popularity.text = GetPopularityString(result);
             Top.text = GetTopString(result);
             Reward.gameObject.SetActive(true);
-            fans.text = $"{GetSign(result.FansIncrease)} {NumberFormatter.FormatValue(result.FansIncrease)}";
-            money.text = $"{GetSign(result.Income)} {NumberFormatter.FormatValue(result.Income)}";
+            _fans.text = $"{GetSign(result.FansIncrease)} {NumberFormatter.FormatValue(result.FansIncrease)}";
+            _money.text = $"{GetSign(result.Income)} {NumberFormatter.FormatValue(result.Income)}";
             Traning.text = string.Empty;
         }
 
@@ -77,8 +77,8 @@ namespace Assets.Scripts.UI {
             Popularity.text = string.Empty;
             Top.text = string.Empty;
             Reward.gameObject.SetActive(false);
-            fans.text = string.Empty;
-            money.text = string.Empty;
+            _fans.text = string.Empty;
+            _money.text = string.Empty;
             Traning.text = result.Traning;
         }
 
