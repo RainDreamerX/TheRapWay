@@ -11,13 +11,7 @@ namespace Assets.Scripts.Enums {
         [Description("Обычный")]
         Common,
 
-        [Description("Комфортный")]
-        Comfort,
-
         [Description("Дорогой")]
-        Expensive,
-
-        [Description("Оч. дорогой")]
-        VeryExpensive
+        Expensive
     }
 }

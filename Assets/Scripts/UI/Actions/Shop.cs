@@ -47,10 +47,8 @@ namespace Assets.Scripts.UI.Actions {
         /// Требования для покупки домов
         /// </summary>
         private static readonly Dictionary<HouseType, Tuple<int, int>> _housesRequirements = new Dictionary<HouseType, Tuple<int, int>> {
-            [HouseType.Common] = new Tuple<int, int>(100000, 10000),
-            [HouseType.Comfort] = new Tuple<int, int>(500000, 70000),
-            [HouseType.Expensive] = new Tuple<int, int>(1200000, 650000),
-            [HouseType.VeryExpensive] = new Tuple<int, int>(2500000, 1500000)
+            [HouseType.Common] = new Tuple<int, int>(500000, 70000),
+            [HouseType.Expensive] = new Tuple<int, int>(2500000, 1500000)
         };
 
         /// <summary>
@@ -94,7 +92,7 @@ namespace Assets.Scripts.UI.Actions {
         /// </summary>
         private void ShowHouseProperty(PlayerProperty playerProperty) {
             Houses.GetComponentsInChildren<Text>(true).First(e => e.name == "Level").text = $"Текущий: {playerProperty.House.GetDescription()}";
-            if (playerProperty.House != HouseType.VeryExpensive) {
+            if (playerProperty.House != HouseType.Expensive) {
                 var nextHouse = playerProperty.House + 1;
                 var requirements = _housesRequirements[nextHouse];
                 Houses.GetComponentsInChildren<Text>(true).First(e => e.name == "Price").text = $"{NumberFormatter.FormatValue(requirements.Item1)} $";

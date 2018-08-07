@@ -13,9 +13,7 @@ namespace Assets.Scripts.Managers {
         public Image Background;
         public Sprite PoorHouseSprite;
         public Sprite CommonHouseSprite;
-        public Sprite ComfortHouseSprite;
         public Sprite ExpensiveHouseSprite;
-        public Sprite VeryExpensiveHouseSprite;
 
         private void Awake() {
             Instance = this;
@@ -39,12 +37,8 @@ namespace Assets.Scripts.Managers {
                     return PoorHouseSprite;
                 case HouseType.Common:
                     return CommonHouseSprite;
-                case HouseType.Comfort:
-                    return ComfortHouseSprite;
                 case HouseType.Expensive:
                     return ExpensiveHouseSprite;
-                case HouseType.VeryExpensive:
-                    return VeryExpensiveHouseSprite;
                 default:
                     throw new ArgumentException();
             }
