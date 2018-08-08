@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Linq;
+using Assets.Scripts.Data;
 using Assets.Scripts.Enums;
 using Assets.Scripts.Extentions;
 using Assets.Scripts.Managers;
@@ -23,11 +24,15 @@ namespace Assets.Scripts.UI {
         public Text Traning;
         public GameObject Reward;
 
+        public Sprite[] WindowSprites;
+
+        private Image _window;
         private Text _fans;
         private Text _money;
         private Button _button;
 
         public void Awake() {
+            _window = GetComponent<Image>();
             _fans = Reward.GetComponentsInChildren<Component>().First(e => e.name == "Fans").GetComponentInChildren<Text>();
             _money = Reward.GetComponentsInChildren<Component>().First(e => e.name == "Money").GetComponentInChildren<Text>();
             _button = GetComponentInChildren<Button>();
@@ -39,6 +44,7 @@ namespace Assets.Scripts.UI {
         /// Показать окно результата
         /// </summary>
         public void Show(ActionResultModel result) {
+            _window.sprite = GetSprite(result.Action, result.Grade);
             StatsManager.UpdateStats();
             Title.text = "Завершено: " + result.Action.GetDescription();
             if (result.Action != ActionType.Traning) {
@@ -49,6 +55,31 @@ namespace Assets.Scripts.UI {
                 ShowTraningResult(result);
             }
             gameObject.SetActive(true);
+        }
+
+        /// <summary>
+        /// Возвращает нужный фон окна
+        /// </summary>
+        private Sprite GetSprite(ActionType type, SuccessGrade grade) {
+            switch (type) {
+                case ActionType.NewTrack:
+                case ActionType.Feat:
+                    return WindowSprites[ActionSpriteKey.TRACK];
+                case ActionType.NewClip:
+                    return WindowSprites[ActionSpriteKey.CLIP];
+                case ActionType.Concert:
+                    var concertKey = grade < SuccessGrade.Middle 
+                        ? ActionSpriteKey.BAD_CONCERT 
+                        : grade > SuccessGrade.Middle 
+                            ? ActionSpriteKey.SUCCESS_CONCERT 
+                            : ActionSpriteKey.NORMAL_CONCERT;
+                    return WindowSprites[concertKey];
+                case ActionType.Battle:
+                    var battleKey = grade >= SuccessGrade.Middle ? ActionSpriteKey.WIN_BATTLE : ActionSpriteKey.LOSE_BATTLE;
+                    return WindowSprites[battleKey];
+                default:
+                    return WindowSprites[ActionSpriteKey.DEFAULT];
+            }
         }
 
         /// <summary>

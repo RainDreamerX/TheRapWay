@@ -13,7 +13,6 @@ namespace Assets.Scripts.Managers {
         public DaysManager DaysManager;
         public int DaysLeft;
         public Image ProgressBar;
-        public SaveManager SaveManager;
         public Text WorkingPhrase;
 
         private float _progressStep;
@@ -34,7 +33,7 @@ namespace Assets.Scripts.Managers {
             var result = await ProcessAction();
             if (result) {
                 callback();
-                SaveManager.Save();
+                SaveManager.Instance.Save();
             }
             gameObject.SetActive(false);
         }
@@ -60,7 +59,13 @@ namespace Assets.Scripts.Managers {
         /// Показывает фразу в окне прогресса
         /// </summary>
         private void ShowWorkingPhrase() {
-            var phrase = DaysLeft == 1 ? "Выкладываем в сеть" : WorkingPhrasesGetter.GetPhrase(_actionType);
+            var phrase = string.Empty;
+            if (DaysLeft == 1 && _actionType != ActionType.Traning) {
+                phrase = "Выкладываем в сеть";
+            }
+            else if (DaysLeft % 2 == 0) {
+                phrase = WorkingPhrasesGetter.GetPhrase(_actionType);
+            }
             if (!string.IsNullOrEmpty(phrase)) WorkingPhrase.text = phrase;
         }
 

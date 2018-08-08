@@ -9,7 +9,12 @@ namespace Assets.Scripts.Managers {
     public class SaveManager : MonoBehaviour {
         private const string SAVE_KEY = "Save";
 
+        public static SaveManager Instance;
         public static DataToSave Data = new DataToSave();
+
+        private void Awake() {
+            Instance = this;
+        }
 
         /// <summary>
         /// Обработчик закрытия приложения

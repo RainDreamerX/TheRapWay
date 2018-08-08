@@ -8,8 +8,6 @@ namespace Assets.Scripts.UI {
     /// Логика главного меню
     /// </summary>
     public class MainMenu : MonoBehaviour {
-        public SaveManager SaveManager;
-
         public Button NewGameButton;
         public Button ContinueButton;
         public Button AboutGameButton;
@@ -26,7 +24,7 @@ namespace Assets.Scripts.UI {
         public void Awake() {
             AdsManager.CreateInstance();
             NewGameButton.onClick.AddListener(() => StartPage.gameObject.SetActive(true));
-            if (!SaveManager.HasSave()) {
+            if (!SaveManager.Instance.HasSave()) {
                 ContinueButton.interactable = false;
                 ContinueButton.GetComponentInChildren<Text>().color = Color.gray;
             }
@@ -53,8 +51,8 @@ namespace Assets.Scripts.UI {
         /// </summary>
         private void StartNewGame() {
             PlayerManager.CreateNew(_playerName);
-            if (SaveManager.HasSave()) SaveManager.DeleteSave();
-            SaveManager.Save();
+            if (SaveManager.Instance.HasSave()) SaveManager.Instance.DeleteSave();
+            SaveManager.Instance.Save();
             SceneManager.LoadSceneAsync(1);
         }
 
@@ -62,7 +60,7 @@ namespace Assets.Scripts.UI {
         /// Продолжить игру
         /// </summary>
         private void ContinueGame() {
-            SaveManager.Load();
+            SaveManager.Instance.Load();
             SceneManager.LoadSceneAsync(1);
         }
 

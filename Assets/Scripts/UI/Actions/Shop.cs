@@ -47,7 +47,7 @@ namespace Assets.Scripts.UI.Actions {
         /// Требования для покупки домов
         /// </summary>
         private static readonly Dictionary<HouseType, Tuple<int, int>> _housesRequirements = new Dictionary<HouseType, Tuple<int, int>> {
-            [HouseType.Common] = new Tuple<int, int>(500000, 70000),
+            [HouseType.Common] = new Tuple<int, int>(800000, 70000),
             [HouseType.Expensive] = new Tuple<int, int>(2500000, 1500000)
         };
 
@@ -125,6 +125,7 @@ namespace Assets.Scripts.UI.Actions {
             StatsManager.UpdateStats();
             gameObject.SetActive(false);
             gameObject.GetComponentInParent<ActionsMenu>().TriggerChildVisible();
+            SaveManager.Instance.Save();
         }
 
         /// <summary>
