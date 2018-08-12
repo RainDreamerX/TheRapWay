@@ -1,4 +1,6 @@
-﻿namespace Assets.Scripts.UI.Events.EventTemplates {
+﻿using Assets.Scripts.Enums;
+
+namespace Assets.Scripts.UI.Events.EventTemplates {
     public class KidsFansEvent : BaseEvent {
         /// <summary>
         /// Название события
@@ -10,6 +12,11 @@
         /// </summary>
         public override string Content { get; } = "Вы опаздываете в аэропорт, выбегаете из подъезда во двор и вас окружает местные детишки. " +
                                                   "Они шумят, наперебой просят автограф или совместную фотографию. Ваши действия?";
+
+        /// <summary>
+        /// Тип события
+        /// </summary>
+        public override EventType Type { get; } = EventType.KidsFans;
 
         /// <summary>
         /// Контент первого действия

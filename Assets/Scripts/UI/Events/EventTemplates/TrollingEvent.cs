@@ -1,5 +1,4 @@
-﻿using Assets.Scripts.Managers;
-using Assets.Scripts.Utils;
+﻿using Assets.Scripts.Enums;
 
 namespace Assets.Scripts.UI.Events.EventTemplates {
     public class TrollingEvent : BaseEvent {
@@ -13,6 +12,11 @@ namespace Assets.Scripts.UI.Events.EventTemplates {
         /// </summary>
         public override string Content { get; } = "В различных социальных сетях под вашими записями иногда мелькают неприятные " +
                                                   "и оскорбительные комментарии. Какова будет ваша реакция?";
+
+        /// <summary>
+        /// Тип события
+        /// </summary>
+        public override EventType Type { get; } = EventType.Trolling;
 
         /// <summary>
         /// Контент первого действия

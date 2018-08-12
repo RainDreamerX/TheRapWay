@@ -176,7 +176,7 @@ namespace Assets.Scripts.UI.Actions {
             return new ActionResultModel {
                 Action = ActionType.NewClip,
                 FansIncrease = CalculateStatIncrease(gradePercent, fansPercentValue, 0.1f) + featBonus,
-                Income = CalculateStatIncrease(gradePercent, fansPercentValue, 0.2f) * Random.Range(4, 7),
+                Income = CalculateStatIncrease(gradePercent, fansPercentValue, 0.2f) * Random.Range(3, 5),
                 Popularity = CalculateStatIncrease(gradePercent, fansPercentValue, 0.1f) * Random.Range(2, 5),
                 Grade = grade
             };

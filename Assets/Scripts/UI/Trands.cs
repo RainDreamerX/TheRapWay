@@ -39,7 +39,7 @@ namespace Assets.Scripts.UI {
             AutotuneTrand = Random.Range(0, 2) > 0;
             var trandMessage = $"Новости трэндов! Публика предпочитает стиль \"{TrandStyle.GetDescription()}\" " +
                                $"и тематику \"{TrandTheme.GetDescription()}\". Автотюн {(AutotuneTrand ? "" : " не ")} в моде";
-            AlertManager.ShowMessage(trandMessage, 10);
+            AlertManager.ShowMessage(trandMessage, 15);
             DisplayTrands();
         }
 

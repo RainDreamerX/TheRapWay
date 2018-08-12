@@ -15,6 +15,11 @@ namespace Assets.Scripts.UI.Events.EventTemplates {
                                                   "За небольшую плату он готов писать и для вас.";
 
         /// <summary>
+        /// Тип события
+        /// </summary>
+        public override EventType Type { get; } = EventType.Ghostwritter;
+
+        /// <summary>
         /// Контент первого действия
         /// </summary>
         public override string FirstButtonText { get; } = "Добавить его в друзья";

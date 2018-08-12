@@ -3526,7 +3526,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: -0.000037248323, y: -0.0000013811812}
+  m_AnchoredPosition: {x: -0.000037248323, y: -0.0000061440105}
   m_SizeDelta: {x: 0, y: -363}
   m_Pivot: {x: 0, y: 1}
 --- !u!114 &242630024
@@ -4600,6 +4600,7 @@ GameObject:
   - component: {fileID: 298663016}
   - component: {fileID: 298663018}
   - component: {fileID: 298663017}
+  - component: {fileID: 298663019}
   m_Layer: 5
   m_Name: EventName
   m_TagString: Untagged
@@ -4637,7 +4638,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
-  m_Color: {r: 0.19607843, g: 0.19607843, b: 0.19607843, a: 1}
+  m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_RaycastTarget: 1
   m_OnCullStateChanged:
     m_PersistentCalls:
@@ -4665,6 +4666,20 @@ CanvasRenderer:
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 298663015}
   m_CullTransparentMesh: 0
+--- !u!114 &298663019
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 298663015}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 1573420865, guid: f70555f144d8491a825f0804e09c671c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_EffectColor: {r: 0, g: 0, b: 0, a: 0.5}
+  m_EffectDistance: {x: 2, y: -2}
+  m_UseGraphicAlpha: 1
 --- !u!1 &298852072
 GameObject:
   m_ObjectHideFlags: 0
@@ -19204,6 +19219,7 @@ GameObject:
   - component: {fileID: 1281812473}
   - component: {fileID: 1281812475}
   - component: {fileID: 1281812474}
+  - component: {fileID: 1281812476}
   m_Layer: 5
   m_Name: EventContent
   m_TagString: Untagged
@@ -19241,7 +19257,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
-  m_Color: {r: 0.3602941, g: 0.3602941, b: 0.3602941, a: 1}
+  m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_RaycastTarget: 1
   m_OnCullStateChanged:
     m_PersistentCalls:
@@ -19269,6 +19285,20 @@ CanvasRenderer:
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 1281812472}
   m_CullTransparentMesh: 0
+--- !u!114 &1281812476
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 1281812472}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 1573420865, guid: f70555f144d8491a825f0804e09c671c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_EffectColor: {r: 0, g: 0, b: 0, a: 0.5}
+  m_EffectDistance: {x: 2, y: -2}
+  m_UseGraphicAlpha: 1
 --- !u!1 &1284544693
 GameObject:
   m_ObjectHideFlags: 0
@@ -30775,6 +30805,7 @@ GameObject:
   - component: {fileID: 1849902164}
   - component: {fileID: 1849902166}
   - component: {fileID: 1849902165}
+  - component: {fileID: 1849902167}
   m_Layer: 5
   m_Name: EventReward
   m_TagString: Untagged
@@ -30812,7 +30843,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
-  m_Color: {r: 0.19607843, g: 0.19607843, b: 0.19607843, a: 1}
+  m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_RaycastTarget: 1
   m_OnCullStateChanged:
     m_PersistentCalls:
@@ -30840,6 +30871,20 @@ CanvasRenderer:
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 1849902163}
   m_CullTransparentMesh: 0
+--- !u!114 &1849902167
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 1849902163}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 1573420865, guid: f70555f144d8491a825f0804e09c671c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_EffectColor: {r: 0, g: 0, b: 0, a: 0.5}
+  m_EffectDistance: {x: 2, y: -2}
+  m_UseGraphicAlpha: 1
 --- !u!1 &1852166684
 GameObject:
   m_ObjectHideFlags: 0
@@ -33982,9 +34027,20 @@ MonoBehaviour:
   EventName: {fileID: 298663017}
   EventContent: {fileID: 1281812474}
   EventReward: {fileID: 1849902165}
+  Background: {fileID: 2100954047}
   FirstButton: {fileID: 346346958}
   SecondButton: {fileID: 1091800233}
   OkButton: {fileID: 1128610136}
+  EventSprites:
+  - {fileID: 21300000, guid: 490bcd0c300542f4388eab6c3ea70b8e, type: 3}
+  - {fileID: 21300000, guid: b898a35868e2eab4bb58794e89cbad8a, type: 3}
+  - {fileID: 21300000, guid: 6d4ef8c960b6afb45a2eaecc9af9055d, type: 3}
+  - {fileID: 21300000, guid: d111a1920e4db46478a2f5a3e729ce1a, type: 3}
+  - {fileID: 21300000, guid: e7a71c6ae99cc4d478243c0094501d90, type: 3}
+  - {fileID: 21300000, guid: 4fe490c5acad2aa439b982a33c9fce3e, type: 3}
+  - {fileID: 21300000, guid: 9fb64ef3ac8d821469943c22d5b1ff0a, type: 3}
+  - {fileID: 21300000, guid: 9fb64ef3ac8d821469943c22d5b1ff0a, type: 3}
+  - {fileID: 21300000, guid: 9fb64ef3ac8d821469943c22d5b1ff0a, type: 3}
 --- !u!114 &2100954050
 MonoBehaviour:
   m_ObjectHideFlags: 0

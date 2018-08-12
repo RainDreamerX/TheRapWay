@@ -1,4 +1,6 @@
-﻿namespace Assets.Scripts.UI.Events.EventTemplates {
+﻿using Assets.Scripts.Enums;
+
+namespace Assets.Scripts.UI.Events.EventTemplates {
     public class DissEvent : BaseEvent {
         /// <summary>
         /// Название события
@@ -10,6 +12,11 @@
         /// </summary>
         public override string Content { get; } = "Ваш конкурент написал на вас дисс. В нем он прошелся по вам, вашему творчеству и близких. " +
                                                   "Вокруг этого дисса поднялось много шума в сети и теперь все ждут вашу реакцию";
+
+        /// <summary>
+        /// Тип события
+        /// </summary>
+        public override EventType Type { get; } = EventType.Diss;
 
         /// <summary>
         /// Контент первого действия

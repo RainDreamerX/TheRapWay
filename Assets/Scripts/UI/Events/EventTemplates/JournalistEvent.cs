@@ -1,4 +1,6 @@
-﻿namespace Assets.Scripts.UI.Events.EventTemplates {
+﻿using Assets.Scripts.Enums;
+
+namespace Assets.Scripts.UI.Events.EventTemplates {
     public class JournalistEvent : BaseEvent {
         /// <summary>
         /// Название события
@@ -10,6 +12,11 @@
         /// </summary>
         public override string Content { get; } = "Вас будят настойчивые звонки в дверь. С помятым видом, вы открываете её " +
                                                   "и видите журналиста, который сразу начинает снимать вас на телефон.";
+
+        /// <summary>
+        /// Тип события
+        /// </summary>
+        public override EventType Type { get; } = EventType.Journalist;
 
         /// <summary>
         /// Контент первого действия

@@ -15,6 +15,11 @@ namespace Assets.Scripts.UI.Events.EventTemplates {
                                                   "занимается созданием качественных битов за вознаграждение и открыт для сотрудничества с вами.";
 
         /// <summary>
+        /// Тип события
+        /// </summary>
+        public override EventType Type { get; } = EventType.Bitmaker;
+
+        /// <summary>
         /// Контент первого действия
         /// </summary>
         public override string FirstButtonText { get; } = "Написать ответное письмо с благодарностью";

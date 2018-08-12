@@ -1,5 +1,4 @@
-﻿using Assets.Scripts.Managers;
-using Assets.Scripts.Utils;
+﻿using Assets.Scripts.Enums;
 
 namespace Assets.Scripts.UI.Events.EventTemplates {
     public class TrackRemixEvent : BaseEvent {
@@ -13,6 +12,11 @@ namespace Assets.Scripts.UI.Events.EventTemplates {
         /// </summary>
         public override string Content { get; } = "В сети появилось большое количество ремиксов на ваши трэки. " +
                                                   "Этим занимается одно небольшое сообщество умельцев. Что предпочтете с ними сделать?";
+
+        /// <summary>
+        /// Тип события
+        /// </summary>
+        public override EventType Type { get; } = EventType.TrackRemix;
 
         /// <summary>
         /// Контент первого действия

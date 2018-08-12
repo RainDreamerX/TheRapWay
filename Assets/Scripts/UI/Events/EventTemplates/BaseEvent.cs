@@ -1,4 +1,5 @@
-﻿using Assets.Scripts.Managers;
+﻿using Assets.Scripts.Enums;
+using Assets.Scripts.Managers;
 using Assets.Scripts.Utils;
 using UnityEngine.UI;
 
@@ -16,6 +17,11 @@ namespace Assets.Scripts.UI.Events.EventTemplates {
         /// Описание события
         /// </summary>
         public abstract string Content { get; }
+
+        /// <summary>
+        /// Тип события
+        /// </summary>
+        public abstract EventType Type { get; }
 
         /// <summary>
         /// Контент первого действия

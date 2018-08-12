@@ -1,4 +1,5 @@
-﻿using Assets.Scripts.Managers;
+﻿using Assets.Scripts.Enums;
+using Assets.Scripts.Managers;
 using Assets.Scripts.Utils;
 
 namespace Assets.Scripts.UI.Events.EventTemplates {
@@ -13,6 +14,11 @@ namespace Assets.Scripts.UI.Events.EventTemplates {
         /// </summary>
         public override string Content { get; } = "С вами связались представители одного интернет-казино и предложили сотрудничество. " +
                                                   "Они хотят, чтобы вы записали небольшой рекламный ролик, в котором читаете хвалебный рэп о них. Что скажете?";
+
+        /// <summary>
+        /// Тип события
+        /// </summary>
+        public override EventType Type { get; } = EventType.Advertising;
 
         /// <summary>
         /// Контент первого действия
