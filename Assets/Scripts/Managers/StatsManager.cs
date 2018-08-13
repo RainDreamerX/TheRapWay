@@ -14,8 +14,12 @@ namespace Assets.Scripts.Managers {
         public Text PlayerName;
         public Text Fans;
         public Text Money;
+        public Button AddFansButton;
+        public Button AddMoneyButton;
 
         public void Awake() {
+            AddFansButton.onClick.AddListener(OnAddFans);
+            AddMoneyButton.onClick.AddListener(OnAddMoney);
             UpdateStats();
         }
 
@@ -31,7 +35,21 @@ namespace Assets.Scripts.Managers {
                 AlertManager.ShowMessage("О вас стали говорить в соц. сетях!", 10);
                 TweetsFeed.Open();
             }
-            if (!playerInfo.EventUnlocked && playerInfo.Fans >= 5000) playerInfo.TweetsUnlocked = true;
+            if (!playerInfo.EventUnlocked && playerInfo.Fans >= 5000) playerInfo.EventUnlocked = true;
+        }
+
+        /// <summary>
+        /// Обработчик добавления фанатов
+        /// </summary>
+        private void OnAddFans() {
+
+        }
+
+        /// <summary>
+        /// Обработчик добавления денег
+        /// </summary>
+        private void OnAddMoney() {
+
         }
     }
 }
